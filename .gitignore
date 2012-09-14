@@ -1,0 +1,21 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.d
+
+# Compiled Dynamic libraries
+*.so
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+bin/*
+!bin/data
+!bin/data/**
+bin/data/*.mp3
+*.cbp
+*.workspace
+Makefile

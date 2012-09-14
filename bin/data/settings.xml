@@ -1,0 +1,134 @@
+<gui>
+    <x_light>679.4</x_light>
+    <y_light>136</y_light>
+    <z_light>553</z_light>
+    <x>1090.2</x>
+    <y>246</y>
+    <z>-825</z>
+    <rotX>34.2</rotX>
+    <rotY>0</rotY>
+    <rotZ>45.0439</rotZ>
+    <rotVelZ>33.0804</rotVelZ>
+    <offset_x>-473.5</offset_x>
+    <offsetRotz>-12.6</offsetRotz>
+    <color1>100, 100, 100, 255</color1>
+    <color2>100, 100, 100, 255</color2>
+    <lineWeight>1.9</lineWeight>
+    <lineArt>1</lineArt>
+    <gui />
+    <rotZ2>43.2306</rotZ2>
+    <passes>10</passes>
+    <wireFacesAlpha>0.44</wireFacesAlpha>
+    <fps>20</fps>
+    <pos>646.362, 823.82, -1600</pos>
+    <rot>0, -30.6, -5160.12</rot>
+    <rotZVel>0</rotZVel>
+    <rotZFactor>-1.15385</rotZFactor>
+    <color>100, 100, 100, 255</color>
+    <connectionAngle>142.2</connectionAngle>
+    <cameraLatitude>16.2</cameraLatitude>
+    <cameraLongitude>136.8</cameraLongitude>
+    <cameraTopY>1020</cameraTopY>
+    <gear1>
+        <pos>0, 0, 0</pos>
+        <rot>0, 0, 295.707</rot>
+        <rotZVel>154.931</rotZVel>
+        <offset_x>0</offset_x>
+        <offsetRotz>-16.2</offsetRotz>
+        <rotZFactor>1</rotZFactor>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1</lineWeight>
+        <wireFacesAlpha>0.41</wireFacesAlpha>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </gear1>
+    <gear2>
+        <pos>-292.663, 377.299, 0</pos>
+        <rot>0, 0, -25264.3</rot>
+        <rotZVel>255.6</rotZVel>
+        <offset_x>-477.5</offset_x>
+        <offsetRotz>-39.6</offsetRotz>
+        <rotZFactor>-1.15385</rotZFactor>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1</lineWeight>
+        <wireFacesAlpha>0.445</wireFacesAlpha>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </gear2>
+    <gear3>
+        <pos>0, -479.5, 0</pos>
+        <rot>0, 0, -25264.3</rot>
+        <rotZVel>0</rotZVel>
+        <offset_x>-479.5</offset_x>
+        <offsetRotz>-39.6</offsetRotz>
+        <rotZFactor>-1.15385</rotZFactor>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1</lineWeight>
+        <wireFacesAlpha>0.4</wireFacesAlpha>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </gear3>
+    <orbitRadius>-2550</orbitRadius>
+    <cameraFov>14.39</cameraFov>
+    <pause>0</pause>
+    <gear4>
+        <pos>250, -912.513, 0</pos>
+        <rot>0, 0, 295.707</rot>
+        <rotZVel>0</rotZVel>
+        <offset_x>-500</offset_x>
+        <offsetRotz>0</offsetRotz>
+        <rotZFactor>1</rotZFactor>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.495</lineWeight>
+        <wireFacesAlpha>0.195</wireFacesAlpha>
+        <lineArt>0</lineArt>
+        <scale>1000</scale>
+    </gear4>
+    <musicCilinder>
+        <pos>0, 0, 300</pos>
+        <rot>0, 90, 295.707</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1</lineWeight>
+        <wireFacesAlpha>0.31</wireFacesAlpha>
+        <lineArt>1</lineArt>
+        <scale>2150.06</scale>
+        <radius>0.0504</radius>
+        <rotZVel>154.931</rotZVel>
+        <boxSize>0.00635</boxSize>
+    </musicCilinder>
+    <wave>
+        <pos>0, 0, 0</pos>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1</lineWeight>
+        <wireFacesAlpha>0.78</wireFacesAlpha>
+        <lineArt>0</lineArt>
+        <scale>1</scale>
+    </wave>
+    <gearCinta>
+        <pos>1200.8, 272, 0</pos>
+        <rot>90, 0, 298.629</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1</lineWeight>
+        <wireFacesAlpha>0.255</wireFacesAlpha>
+        <lineArt>0</lineArt>
+        <scale>5000</scale>
+        <rotZVel>169.2</rotZVel>
+        <offset_x>-200</offset_x>
+        <offsetRotz>0</offsetRotz>
+        <rotZFactor>1</rotZFactor>
+    </gearCinta>
+    <gearDir>
+        <pos>0, 612, 0</pos>
+        <rot>90, 0, -31954.1</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1</lineWeight>
+        <wireFacesAlpha>0.17</wireFacesAlpha>
+        <lineArt>1</lineArt>
+        <scale>5000</scale>
+        <rotZVel>-64.8</rotZVel>
+        <offset_x>-450</offset_x>
+        <offsetRotz>0</offsetRotz>
+        <rotZFactor>1</rotZFactor>
+    </gearDir>
+</gui>

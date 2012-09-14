@@ -1,0 +1,7 @@
+ofxAssimpModelLoader
+ofxGui
+ofxXmlSettings
+ofxTimeline
+ofxTween
+ofxRange
+ofxTextInputField

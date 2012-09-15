@@ -22,6 +22,8 @@ void WaveStripe::setup(){
 	lineArt = false;
 	wireFacesAlpha = 0;
 	mesh.getVertices().resize(1024*2);
+	parameters.add(thickness.set("thickness",2,1,30));
+	parameters.add(ampFactor.set("ampFactor",100,50,1000));
 	for(int i=0; i<1024;i++){
 		ofVec3f current(i*15,0,0);
 		ofVec3f next((i+1)*15,0,0);
@@ -31,7 +33,7 @@ void WaveStripe::setup(){
 
 		ofVec3f dir = (p1 - p0).normalize();			// normalized direction vector from p0 to p1
 		ofVec3f right = dir.cross(up).normalize();	// right vector
-		right *= 30;//thisThickness;
+		right *= thickness;//thisThickness;
 		mesh.getVertices()[i*2] = current - right;
 		mesh.getVertices()[i*2+1] = current + right;
 	}
@@ -53,18 +55,18 @@ void WaveStripe::update(){
 		amplitudesRightFront[i]*=.95;
 	}
 	for(int i=0; i<((int)amplitudesLeftFront.size())-1;i++){
-		ofVec3f current(i*30,amplitudesLeftFront[amplitudesLeftFront.size()-i]*2000,0);
-		ofVec3f currentR(i*30,amplitudesRightFront[amplitudesRightFront.size()-i]*2000,0);
-		ofVec3f next((i+1)*30,amplitudesLeftFront[amplitudesLeftFront.size()-(i+1)]*2000,0);
-		ofVec3f nextR((i+1)*30,amplitudesRightFront[amplitudesRightFront.size()-(i+1)]*2000,0);
+		ofVec3f current(i*thickness,amplitudesLeftFront[amplitudesLeftFront.size()-i]*ampFactor,0);
+		ofVec3f currentR(i*thickness,amplitudesRightFront[amplitudesRightFront.size()-i]*ampFactor,0);
+		ofVec3f next((i+1)*thickness,amplitudesLeftFront[amplitudesLeftFront.size()-(i+1)]*ampFactor,0);
+		ofVec3f nextR((i+1)*thickness,amplitudesRightFront[amplitudesRightFront.size()-(i+1)]*ampFactor,0);
 		ofVec3f up(0, 1, 0);
 
 		ofVec3f dir = (next - current).normalize();			// normalized direction vector from p0 to p1
 		ofVec3f right = dir.cross(up).normalize();	// right vector
-		right *= 30;//thisThickness;
+		right *= thickness;//thisThickness;
 		dir = (nextR - currentR).normalize();
 		ofVec3f rightR = dir.cross(up).normalize();	// right vector
-		rightR *= 30;//thisThickness;
+		rightR *= thickness;//thisThickness;
 
 
 		mesh.getVertices()[i*2] = mesh.getVertices()[i*2]*.8 + (current - right)*.2;
@@ -80,7 +82,7 @@ void WaveStripe::update(){
 
 void WaveStripe::newSoundBuffer(ofSoundBuffer & buffer){
 	float ampL = buffer.getRMSAmplitudeChannel(0);
-	float ampR = ampL;//buffer.getRMSAmplitudeChannel(1);
+	float ampR = buffer.getRMSAmplitudeChannel(1);
 	mutex.lock();
 	amplitudesLeftBack.push_back(ampL);
 	amplitudesRightBack.push_back(ampR);

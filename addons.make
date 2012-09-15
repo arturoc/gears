@@ -5,3 +5,4 @@ ofxTimeline
 ofxTween
 ofxRange
 ofxTextInputField
+ofxFbxSDK

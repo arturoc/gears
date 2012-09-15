@@ -19,6 +19,7 @@ public:
 	virtual ~MusicCilinder();
 
 	void setup(string path, string name);
+	void setup(ofxFBXMesh & mesh);
 	void update();
 
 	void connectTo(Gear & gear);
@@ -32,6 +33,7 @@ public:
 	ofParameter<float> radius;
 	ofParameter<float> rotZVel;
 	ofParameter<float> boxSize;
+	ofParameter<float> length;
 
 private:
 	Gear * mom;

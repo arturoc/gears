@@ -1,17 +1,17 @@
 #pragma once
 
+#include "ofxFBX.h"
+#include "MusicCilinder.h"
+#include "WaveStripe.h"
+#include "Gear.h"
 #include "ofMain.h"
-#include "ofxAssimpModelLoader.h"
 #include "ofxGui.h"
 #include "ofParameter.h"
 #include "Glow.h"
 #include "ofBasicSoundPlayer.h"
 #include "ofxTimeline.h"
-#include "Gear.h"
 #include "ofBaseClock.h"
 #include "ofTimeUtils.h"
-#include "MusicCilinder.h"
-#include "WaveStripe.h"
 
 class testApp : public ofBaseApp{
 
@@ -32,6 +32,7 @@ class testApp : public ofBaseApp{
 		
 		void connectionAngleChanged(float & angle);
 		void pausePressed(bool & pressed);
+		void resetTimePressed(bool & pressed);
 
 
 		ofxPanel panel;
@@ -42,6 +43,7 @@ class testApp : public ofBaseApp{
 		ofParameter<float> cameraTopY;
 		ofParameter<float> cameraFov;
 		ofParameter<bool> pause;
+		ofxButton resetTime;
 
 		ofLight light;
 
@@ -49,12 +51,18 @@ class testApp : public ofBaseApp{
 		ofBasicSoundPlayer player;
 		ofxTimeline timeline;
 
-		Gear gear1, gear2, gear3, gear4;
+		/*Gear gear1, gear2, gear3, gear4;
 		Gear gearCinta;
-		Gear gearDir;
+		Gear gearDir;*/
+
+		vector<Gear*> gears;
+
 		MusicCilinder musicCilinder;
-		ofCamera camera,cameraTop,cameraFront,cameraLeft,cameraRight;
-		ofSystemClock clock;
+		ofCamera cameraTop,cameraFront,cameraLeft,cameraRight;
+		ofxFBXCamera * camera;
+		ofFrameClock clock;
 		ofSoundStreamClock audioClock;
 		WaveStripe wave;
+
+		ofxFBXScene fbxScene;
 };

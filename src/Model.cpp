@@ -10,7 +10,7 @@
 ofxAssimpModelLoader Model::modelLoader;
 
 Model::Model() {
-	// TODO Auto-generated constructor stub
+	fbxMesh = NULL;
 
 }
 
@@ -38,6 +38,18 @@ void Model::setup(string path, string name){
 	parameters.add(scale.set("scale",1000,0.1,5000));
 }
 
+void Model::setup(ofxFBXMesh & _fbxMesh){
+	fbxMesh = &_fbxMesh;
+	parameters.setName(fbxMesh->getName());
+	/*parameters.add(pos.set("pos",ofVec3f(0,0,0),ofVec3f(-ofGetWidth(),-ofGetHeight(),-10000),ofVec3f(+ofGetWidth(),+ofGetHeight(),10000)));*/
+	parameters.add(rot.set("rot",ofVec3f(0,0,0),ofVec3f(-180,-180,0),ofVec3f(180,180,360)));
+	parameters.add(color.set("color",ofColor(100,100,100),ofColor(ofColor::black,0),ofColor(ofColor::white,255)));
+	parameters.add(lineWeight.set("lineWeight",3,1,10));
+	parameters.add(wireFacesAlpha.set("wireFacesAlpha",1,0,1));
+	parameters.add(lineArt.set("lineArt",true));
+	parameters.add(scale.set("scale",1000,0.1,5000));
+}
+
 void Model::drawContour(){
 	drawModel(lineArt);
 
@@ -55,12 +67,16 @@ void Model::drawModel(bool lineArt){
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_DEPTH_TEST);
 	if(lineArt) glPolygonMode(GL_FRONT_AND_BACK, ofGetGLPolyMode(OF_MESH_WIREFRAME));
-	ofPushMatrix();
-	ofTranslate(pos->x,pos->y,pos->z);
-	ofScale(scale,scale,scale);
-	ofRotateZ(rot->z);
-	ofRotateY(rot->y);
-	ofRotateX(rot->x);
+	if(fbxMesh){
+		fbxMesh->getNode().transformGL();
+	}else{
+		ofPushMatrix();
+		ofTranslate(pos->x,pos->y,pos->z);
+		ofScale(scale,scale,scale);
+		ofRotateZ(rot->z);
+		ofRotateY(rot->y);
+		ofRotateX(rot->x);
+	}
 	if(lineArt){
 		drawLineArt(lineWeight,ofColor(0,0),ofColor(color));
 	}else{
@@ -69,7 +85,11 @@ void Model::drawModel(bool lineArt){
 		ofSetColor(color,(1-wireFacesAlpha)*255.);
 		renderContour();
 	}
-	ofPopMatrix();
+	if(fbxMesh){
+		fbxMesh->getNode().restoreTransformGL();
+	}else{
+		ofPopMatrix();
+	}
 	glPopClientAttrib();
 	glPopAttrib();
 	ofDisableLighting();
@@ -110,9 +130,15 @@ void Model::drawLineArt(float weight, ofColor fill, ofColor stroke) {
 
 
 void Model::renderContour(){
-	mesh.drawWireframe();
+	if(fbxMesh!=NULL){
+		fbxMesh->drawWireframe();
+	}
+	else mesh.drawWireframe();
 }
 
 void Model::renderFill(){
-	mesh.drawFaces();
+	if(fbxMesh!=NULL){
+		fbxMesh->drawFaces();
+	}
+	else mesh.drawFaces();
 }

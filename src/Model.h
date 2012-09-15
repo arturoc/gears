@@ -8,6 +8,7 @@
 #ifndef MODEL_H_
 #define MODEL_H_
 
+#include "ofxFBX.h"
 #include "ofxAssimpModelLoader.h"
 #include "ofVboMesh.h"
 #include "ofConstants.h"
@@ -18,6 +19,7 @@ public:
 	virtual ~Model();
 
 	virtual void setup(string path, string name);
+	virtual void setup(ofxFBXMesh & fbxMesh);
 	virtual void update()=0;
 
 	void drawContour();
@@ -40,6 +42,7 @@ protected:
 	void drawModel(bool lineArt);
 	static ofxAssimpModelLoader modelLoader;
 	ofVboMesh mesh;
+	ofxFBXMesh * fbxMesh;
 };
 
 #endif /* MODEL_H_ */

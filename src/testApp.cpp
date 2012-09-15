@@ -2,19 +2,23 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-
+	clock.setFrameRate(30);
 	Gear::clock = &clock;
 	MusicCilinder::clock = &clock;
 	MusicCilinder::audioClock = &audioClock;
 	WaveStripe::clock = &clock;
 
-	gear1.setup("engranajeGrande.obj","gear1");
+	fbxScene.load("A_camara_02.fbx");
+
+	/*gear1.setup("engranajeGrande.obj","gear1");
 	gear2.setup("engranajeChico.obj","gear2");
 	gear3.setup("engranajeChico.obj","gear3");
 	gear4.setup("engranajeGrande.obj","gear4");
 	gearCinta.setup("gearCintas.obj","gearCinta");
-	gearDir.setup("gearDir.obj","gearDir");
-	musicCilinder.setup("musicalBox_.obj","musicCilinder");
+	gearDir.setup("gearDir.obj","gearDir");*/
+
+
+	//musicCilinder.setup("musicalBox_.obj","musicCilinder");
 	wave.setup();
 
 	panel.setup("gui");
@@ -27,23 +31,56 @@ void testApp::setup(){
 	panel.add(cameraLongitude.set("cameraLongitude",0,-180,180));
 	panel.add(orbitRadius.set("orbitRadius",1000,-3000,3000));
 	panel.add(cameraTopY.set("cameraTopY",3000,0,6000));
-	panel.add(cameraFov.set("cameraFov",camera.getFov(),8,150));
+	//panel.add(cameraFov.set("cameraFov",camera.getFov(),8,150));
 	panel.add(glow.passes);
 	panel.add(pause.set("pause",false));
-	panel.add(gearCinta.parameters);
+	panel.add(resetTime.setup("resetTime"));
+	/*panel.add(gearCinta.parameters);
 	panel.add(gearDir.parameters);
 	panel.add(gear1.parameters);
 	panel.add(gear2.parameters);
 	panel.add(gear3.parameters);
-	panel.add(gear4.parameters);
-	panel.add(musicCilinder.parameters);
+	panel.add(gear4.parameters);*/
 	panel.add(wave.parameters);
-	panel.loadFromFile("settings.xml");
+	for(u_int i=0;i<fbxScene.getMeshes().size();++i){
+		if(ofIsStringInString(ofToLower(fbxScene.getMeshes()[i].getName()),"engranaje")){
+			Gear * gear = new Gear;
+			gear->setup(fbxScene.getMeshes()[i]);
+			if(i>0){
+				gear->connectTo(*gears[i-1],0);
+				gear->rotZFactor = -1;
+			}
+			gear->rotAxis=2;
+			gears.push_back(gear);
+			panel.add(gear->parameters);
+		}else if(ofIsStringInString(ofToLower(fbxScene.getMeshes()[i].getName()),"tubo")){
+			Gear * gear = new Gear;
+			gear->setup(fbxScene.getMeshes()[i]);
+			if(i>0){
+				gear->connectTo(*gears[i-1],0);
+				gear->rotZFactor = i%2==0?1:-1;
+			}
+			gear->rotAxis=1;
+			gears.push_back(gear);
+			panel.add(gear->parameters);
+
+		}else if(ofIsStringInString(ofToLower(fbxScene.getMeshes()[i].getName()),"cilindro")){
+			musicCilinder.setup(fbxScene.getMeshes()[i]);
+			if(i>0){
+				musicCilinder.connectTo(*gears[0]);
+			}
+			panel.add(musicCilinder.parameters);
+
+		}
+
+	}
+	//panel.loadFromFile("settings.xml");
 
 	connectionAngle.addListener(this,&testApp::connectionAngleChanged);
 	pause.addListener(this,&testApp::pausePressed);
+	resetTime.addListener(this,&testApp::resetTimePressed);
 
-	gear1.rotZFactor = 1;
+	/*gear1.rotZFactor = 1;
 	gear1.offsetx = 0;
 
 	gear2.rotZFactor = -15./13.;
@@ -56,14 +93,16 @@ void testApp::setup(){
 
 	gear4.rotZFactor = 1;
 	gear4.offsetx = (float)gear2.offsetx;
-	gear4.connectTo(gear3,-30);
+	gear4.connectTo(gear3,-30);*/
 
-	camera.setFarClip(-15000);
+	//camera.setFarClip(-15000);
+	camera = &fbxScene.getCameras()[0];
+
 	cameraTop.setFarClip(-15000);
 	cameraTop.setPosition(0,cameraTopY,-1500);
-	cameraTop.lookAt(gear1.pos);
+	cameraTop.lookAt(ofVec3f(0,0,0));
 
-	musicCilinder.connectTo(gear1);
+	musicCilinder.connectTo(*gears[0]);
 
 	ofBackground(0);
 	light.setup();
@@ -91,12 +130,16 @@ void testApp::setup(){
 }
 
 void testApp::connectionAngleChanged(float & angle){
-	gear2.connectTo(gear1,connectionAngle);
+	//gear2.connectTo(gear1,connectionAngle);
 }
 
 void testApp::pausePressed(bool & pressed){
 	if(pause) player.setPaused(pause);
 	else player.play();
+}
+
+void testApp::resetTimePressed(bool & pressed){
+	if(!pressed) clock.reset();
 }
 
 //--------------------------------------------------------------
@@ -110,13 +153,21 @@ void testApp::update(){
 		avg += abs(buffer[i*buffer.getNumChannels()]);
 	}
 	avg/=buffer.bufferSize();
-	gear1.rotZVel = avg*2000;
+
+	gears[0]->rotZVel = avg*2000;
+	for(u_int i=0;i<gears.size();i++){
+		gears[i]->update();
+	}
+
+	camera->setTime(clock.getElapsedTimeMillis());
+
+	/*gear1.rotZVel = avg*2000;
 	gear1.update();
 	gear2.update();
 	gear3.update();
 	gear4.update();
 	gearCinta.update();
-	gearDir.update();
+	gearDir.update();*/
 	musicCilinder.update();
 
 	wave.update();
@@ -125,28 +176,28 @@ void testApp::update(){
 	//z = timeline.getKeyframeValue("z");
 	fps = ofGetFrameRate();
 
-	camera.setFov(cameraFov);
-	camera.lookAt(gear1.pos,ofVec3f(0,1,0));
+	//camera.setFov(cameraFov);
+	//camera.lookAt(gears[0]->pos,ofVec3f(0,1,0));
 	//cameraLongitude = gear1.rot->z*5;
 	//cameraLatitude = gear1.rot->z*5;
 	//while (cameraLatitude>90) cameraLatitude-=180;
-	camera.orbit(cameraLongitude,cameraLatitude,orbitRadius,gear1.pos);
+	//camera.orbit(cameraLongitude,cameraLatitude,orbitRadius,gear1.pos);
 
 	cameraTop.resetTransform();
-	cameraTop.setPosition(0,cameraTopY,gear1.pos->z);//gear1.pos.get().z);
-	cameraTop.lookAt(ofVec3f(0,0,gear1.pos->z),ofVec3f(0,0,1));
+	cameraTop.setPosition(0,cameraTopY,0);//gear1.pos.get().z);
+	cameraTop.lookAt(ofVec3f(0,0,0),ofVec3f(0,0,1));
 
 	cameraFront.resetTransform();
-	cameraFront.setPosition(0,0,gear1.pos->z-1000);//gear1.pos.get().z);
-	cameraFront.lookAt(ofVec3f(0,0,gear1.pos->z),ofVec3f(0,1,0));
+	cameraFront.setPosition(0,0,-1000);//gear1.pos.get().z);
+	cameraFront.lookAt(ofVec3f(0,0,0),ofVec3f(0,1,0));
 
 	cameraLeft.resetTransform();
-	cameraLeft.setPosition(-1000,0,gear1.pos->z);//gear1.pos.get().z);
-	cameraLeft.lookAt(ofVec3f(gear1.pos),ofVec3f(0,1,0));
+	cameraLeft.setPosition(-1000,0,0);//gear1.pos.get().z);
+	cameraLeft.lookAt(ofVec3f(0,0,0),ofVec3f(0,1,0));
 
 	cameraRight.resetTransform();
-	cameraRight.setPosition(1000,0,gear1.pos.get().z);//gear1.pos.get().z);
-	cameraRight.lookAt(ofVec3f(gear1.pos),ofVec3f(0,1,0));
+	cameraRight.setPosition(1000,0,0);//gear1.pos.get().z);
+	cameraRight.lookAt(ofVec3f(0,0,0),ofVec3f(0,1,0));
 }
 
 //--------------------------------------------------------------
@@ -159,33 +210,42 @@ void testApp::draw(){
 	ofPopView();
 
 	glow.begin(false);
-	camera.begin();
+	camera->begin();
 	//ofBackgroundGradient(ofColor(50),ofColor::black,OF_GRADIENT_CIRCULAR);
-	gear1.drawFill();
+
+	for(u_int i=0;i<gears.size();i++){
+		gears[i]->drawFill();
+	}
+	/*gear1.drawFill();
 	gear2.drawFill();
 	gear3.drawFill();
 	gear4.drawFill();
+	gearCinta.drawFill();
+	gearDir.drawFill();*/
 	musicCilinder.drawFill();
 	wave.drawFill();
-	gearCinta.drawFill();
-	gearDir.drawFill();
-	camera.end();
+	camera->end();
 	glow.end();
 
 	ofSetColor(255);
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
 	glow.draw(290,720+10,1280,-720);
 
-	camera.begin(ofRectangle(290,10,1280,720));
-	gear1.drawContour();
+	camera->begin(ofRectangle(290,10,1280,720));
+
+	for(u_int i=0;i<gears.size();i++){
+		gears[i]->drawContour();
+	}
+
+	/*gear1.drawContour();
 	gear2.drawContour();
 	gear3.drawContour();
 	gear4.drawContour();
+	gearCinta.drawContour();
+	gearDir.drawContour();*/
 	musicCilinder.drawContour();
 	wave.drawContour();
-	gearCinta.drawContour();
-	gearDir.drawContour();
-	camera.end();
+	camera->end();
 
 
 	ofEnableAlphaBlending();
@@ -194,60 +254,80 @@ void testApp::draw(){
 	ofFill();
 	ofRect(290,10,1280/4,720/4);
 	cameraTop.begin(ofRectangle(290,10,1280/4,720/4));
-	gear1.drawContour();
+
+	for(u_int i=0;i<gears.size();i++){
+		gears[i]->drawContour();
+	}
+
+	/*gear1.drawContour();
 	gear2.drawContour();
 	gear3.drawContour();
 	gear4.drawContour();
+	gearCinta.drawContour();
+	gearDir.drawContour();*/
 	musicCilinder.drawContour();
 	wave.drawContour();
-	gearCinta.drawContour();
-	gearDir.drawContour();
-	camera.draw();
+	camera->draw();
 	cameraTop.end();
 
 	ofSetColor(0);
 	ofFill();
 	ofRect(290,10+720/4,1280/4,720/4);
 	cameraFront.begin(ofRectangle(290,(720/4)+10,1280/4,720/4));
-	gear1.drawContour();
+
+	for(u_int i=0;i<gears.size();i++){
+		gears[i]->drawContour();
+	}
+
+	/*gear1.drawContour();
 	gear2.drawContour();
 	gear3.drawContour();
 	gear4.drawContour();
+	gearCinta.drawContour();
+	gearDir.drawContour();*/
 	musicCilinder.drawContour();
 	wave.drawContour();
-	gearCinta.drawContour();
-	gearDir.drawContour();
-	camera.draw();
+	camera->draw();
 	cameraFront.end();
 
 	ofSetColor(0);
 	ofFill();
 	ofRect(290,10+(720/4)*2,1280/4,720/4);
 	cameraLeft.begin(ofRectangle(290,(720/4)*2+10,1280/4,720/4));
-	gear1.drawContour();
+
+	for(u_int i=0;i<gears.size();i++){
+		gears[i]->drawContour();
+	}
+
+	/*gear1.drawContour();
 	gear2.drawContour();
 	gear3.drawContour();
 	gear4.drawContour();
+	gearCinta.drawContour();
+	gearDir.drawContour();*/
 	musicCilinder.drawContour();
 	wave.drawContour();
-	gearCinta.drawContour();
-	gearDir.drawContour();
-	camera.draw();
+	camera->draw();
 	cameraLeft.end();
 
 	ofSetColor(0);
 	ofFill();
 	ofRect(290,10+(720/4)*3,1280/4,720/4);
 	cameraRight.begin(ofRectangle(290,(720/4)*3+10,1280/4,720/4));
-	gear1.drawContour();
+
+	for(u_int i=0;i<gears.size();i++){
+		gears[i]->drawContour();
+	}
+
+	/*gear1.drawContour();
 	gear2.drawContour();
 	gear3.drawContour();
 	gear4.drawContour();
+	gearCinta.drawContour();
+	gearDir.drawContour();*/
 	musicCilinder.drawContour();
 	wave.drawContour();
-	gearCinta.drawContour();
-	gearDir.drawContour();
-	camera.draw();
+	camera->draw();
 	cameraRight.end();
 
 

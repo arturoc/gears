@@ -8,9 +8,9 @@
 #ifndef WAVESTRIPE_H_
 #define WAVESTRIPE_H_
 
+#include "Model.h"
 #include "ofSoundBuffer.h"
 #include "ofVboMesh.h"
-#include "Model.h"
 #include "ofBaseClock.h"
 
 class WaveStripe: public Model {
@@ -25,6 +25,8 @@ public:
 
 	static ofBaseClock * clock;
 
+	ofParameter<float> thickness;
+	ofParameter<float> ampFactor;
 private:
 	vector<float> amplitudesLeftFront, amplitudesRightFront, amplitudesLeftBack, amplitudesRightBack;
 	ofMutex mutex;

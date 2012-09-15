@@ -25,8 +25,19 @@ void MusicCilinder::setup(string path, string name){
 	parameters.add(radius.set("radius",0.055,0.04,0.2));
 	parameters.add(rotZVel.set("rotZVel",0,-360,360));
 	parameters.add(boxSize.set("boxSize",0.01,0,0.01));
+	parameters.add(length.set("length",0.085*2,0.001,0.085));
 	rot = ofVec3f(0,90,0);
 	pos = ofVec3f(0,0,300);
+	score.setup(*audioClock);
+	score.load("score.sc");
+}
+
+void MusicCilinder::setup(ofxFBXMesh & mesh){
+	Model::setup(mesh);
+	parameters.add(radius.set("radius",5,0.04,10));
+	parameters.add(rotZVel.set("rotZVel",0,-360,360));
+	parameters.add(boxSize.set("boxSize",.75,0,2));
+	parameters.add(length.set("length",8.5*2,0.1,8.5));
 	score.setup(*audioClock);
 	score.load("score.sc");
 }
@@ -42,12 +53,21 @@ void MusicCilinder::update(){
 	}
 	rot = ofVec3f(rot->x,rot->y, rot->z + rotZVel * clock->getLastFrameSeconds());
 	if(rot->z>360) rot = ofVec3f(rot->x,rot->y,rot->z - 360);
+	if(fbxMesh){
+		fbxMesh->setTime(clock->getElapsedTimeMillis());
+	}
+	ofQuaternion zrot;
+	zrot.makeRotate(rot->z,ofVec3f(1,0,0));
+	ofQuaternion q = fbxMesh->getNode().getGlobalOrientation();
+	zrot *= q;
+	fbxMesh->getNode().setGlobalOrientation(zrot);
+
 
 	score.update();
 	float now = clock->getElapsedTimeSeconds();
 	MusicCilinderScore::AudioEvent event = score.getNextEvent();
 	if(event.timeMillis>lastEvent){
-		notes.push_back(Note(ofMap(event.freq,0,127,-0.085,0.085),rot->z,now));
+		notes.push_back(Note(ofMap(event.freq,0,127,-length*.5,length*.5),rot->z,now));
 		lastEvent = event.timeMillis;
 	}
 

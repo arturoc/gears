@@ -8,16 +8,17 @@
 #ifndef GEAR_H_
 #define GEAR_H_
 
+#include "Model.h"
 #include "ofxAssimpModelLoader.h"
 #include "ofParameter.h"
 #include "ofBaseClock.h"
-#include "Model.h"
 
 class Gear:public Model {
 public:
 	Gear();
 
 	void setup(string path, string name);
+	void setup(ofxFBXMesh & mesh);
 	void update();
 
 	void connectTo(Gear & gear, float angle);
@@ -28,6 +29,7 @@ public:
 	ofParameter<float> offsetRotz;
 	ofParameter<float> offsetx;
 	ofParameter<float> rotZFactor;
+	ofParameter<int> rotAxis;
 
 private:
 	Gear * mom;

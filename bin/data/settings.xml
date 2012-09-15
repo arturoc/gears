@@ -1,7 +1,7 @@
 <gui>
-    <x_light>679.4</x_light>
-    <y_light>136</y_light>
-    <z_light>553</z_light>
+    <x_light>799</x_light>
+    <y_light>427</y_light>
+    <z_light>799</z_light>
     <x>1090.2</x>
     <y>246</y>
     <z>-825</z>
@@ -17,18 +17,18 @@
     <lineArt>1</lineArt>
     <gui />
     <rotZ2>43.2306</rotZ2>
-    <passes>10</passes>
+    <passes>5</passes>
     <wireFacesAlpha>0.44</wireFacesAlpha>
-    <fps>20</fps>
+    <fps>19</fps>
     <pos>646.362, 823.82, -1600</pos>
     <rot>0, -30.6, -5160.12</rot>
     <rotZVel>0</rotZVel>
     <rotZFactor>-1.15385</rotZFactor>
     <color>100, 100, 100, 255</color>
-    <connectionAngle>142.2</connectionAngle>
-    <cameraLatitude>16.2</cameraLatitude>
-    <cameraLongitude>136.8</cameraLongitude>
-    <cameraTopY>1020</cameraTopY>
+    <connectionAngle>0</connectionAngle>
+    <cameraLatitude>0</cameraLatitude>
+    <cameraLongitude>0</cameraLongitude>
+    <cameraTopY>3000</cameraTopY>
     <gear1>
         <pos>0, 0, 0</pos>
         <rot>0, 0, 295.707</rot>
@@ -68,7 +68,7 @@
         <lineArt>1</lineArt>
         <scale>1000</scale>
     </gear3>
-    <orbitRadius>-2550</orbitRadius>
+    <orbitRadius>1000</orbitRadius>
     <cameraFov>14.39</cameraFov>
     <pause>0</pause>
     <gear4>
@@ -86,24 +86,26 @@
     </gear4>
     <musicCilinder>
         <pos>0, 0, 300</pos>
-        <rot>0, 90, 295.707</rot>
+        <rot>0, 90, 289.232</rot>
         <color>100, 100, 100, 255</color>
-        <lineWeight>1</lineWeight>
-        <wireFacesAlpha>0.31</wireFacesAlpha>
+        <lineWeight>3</lineWeight>
+        <wireFacesAlpha>1</wireFacesAlpha>
         <lineArt>1</lineArt>
-        <scale>2150.06</scale>
-        <radius>0.0504</radius>
-        <rotZVel>154.931</rotZVel>
-        <boxSize>0.00635</boxSize>
+        <scale>1000</scale>
+        <radius>0.055</radius>
+        <rotZVel>65.379</rotZVel>
+        <boxSize>0.01</boxSize>
     </musicCilinder>
     <wave>
         <pos>0, 0, 0</pos>
-        <rot>0, 0, 0</rot>
+        <rot>0, 90, 0</rot>
         <color>100, 100, 100, 255</color>
-        <lineWeight>1</lineWeight>
-        <wireFacesAlpha>0.78</wireFacesAlpha>
+        <lineWeight>3</lineWeight>
+        <wireFacesAlpha>0</wireFacesAlpha>
         <lineArt>0</lineArt>
         <scale>1</scale>
+        <thickness>2</thickness>
+        <ampFactor>100</ampFactor>
     </wave>
     <gearCinta>
         <pos>1200.8, 272, 0</pos>
@@ -131,4 +133,82 @@
         <offsetRotz>0</offsetRotz>
         <rotZFactor>1</rotZFactor>
     </gearDir>
+    <Engranaje_2>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>3</lineWeight>
+        <wireFacesAlpha>1</wireFacesAlpha>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+        <rotZVel>22.8561</rotZVel>
+        <offset_x>-200</offset_x>
+        <offsetRotz>0</offsetRotz>
+        <rotZFactor>1</rotZFactor>
+        <rot>0, 0, 34.4086</rot>
+    </Engranaje_2>
+    <Engranaje>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>3</lineWeight>
+        <wireFacesAlpha>1</wireFacesAlpha>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+        <rotZVel>0</rotZVel>
+        <offset_x>-200</offset_x>
+        <offsetRotz>0</offsetRotz>
+        <rotZFactor>-1</rotZFactor>
+        <rot>0, 0, -394.409</rot>
+    </Engranaje>
+    <Tubo_1>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>3</lineWeight>
+        <wireFacesAlpha>1</wireFacesAlpha>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+        <rotZVel>0</rotZVel>
+        <offset_x>-200</offset_x>
+        <offsetRotz>0</offsetRotz>
+        <rotZFactor>1</rotZFactor>
+        <rot>0, 0, 34.4086</rot>
+    </Tubo_1>
+    <Tubo_1_b>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>3</lineWeight>
+        <wireFacesAlpha>1</wireFacesAlpha>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+        <rotZVel>0</rotZVel>
+        <offset_x>-200</offset_x>
+        <offsetRotz>0</offsetRotz>
+        <rotZFactor>-1</rotZFactor>
+        <rot>0, 0, -394.409</rot>
+    </Tubo_1_b>
+    <GearCinta>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>3</lineWeight>
+        <wireFacesAlpha>1</wireFacesAlpha>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+        <rotZVel>0</rotZVel>
+        <offset_x>-200</offset_x>
+        <offsetRotz>0</offsetRotz>
+        <rotZFactor>1</rotZFactor>
+    </GearCinta>
+    <Cilindro_1>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>3</lineWeight>
+        <wireFacesAlpha>1</wireFacesAlpha>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+        <rotZVel>22.8561</rotZVel>
+        <offset_x>-200</offset_x>
+        <offsetRotz>0</offsetRotz>
+        <rotZFactor>1</rotZFactor>
+        <radius>5</radius>
+        <boxSize>0.75</boxSize>
+        <rot>0, 0, 34.4086</rot>
+        <length>17</length>
+    </Cilindro_1>
+    <>0
+    <>0
+    <>0
+    <>0</>
 </gui>

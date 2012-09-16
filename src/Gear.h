@@ -13,6 +13,8 @@
 #include "ofParameter.h"
 #include "ofBaseClock.h"
 
+class MusicCilinder;
+
 class Gear:public Model {
 public:
 	Gear();
@@ -22,6 +24,7 @@ public:
 	void update();
 
 	void connectTo(Gear & gear, float angle);
+	void connectTo(MusicCilinder & cilinder);
 
 	static ofBaseClock * clock;
 
@@ -30,9 +33,11 @@ public:
 	ofParameter<float> offsetx;
 	ofParameter<float> rotZFactor;
 	ofParameter<int> rotAxis;
+	ofParameter<int> reduction;
 
 private:
 	Gear * mom;
+	MusicCilinder * shaft;
 	float connectionAngle;
 };
 

@@ -20,13 +20,16 @@ public:
 
 	virtual void setup(string path, string name);
 	virtual void setup(ofxFBXMesh & fbxMesh);
-	virtual void update()=0;
+	virtual void update(){};
 
 	void drawContour();
 	void drawFill();
 
 	virtual void renderContour();
 	virtual void renderFill();
+
+	ofNode getNode();
+	string getName();
 
 	ofParameter<ofVec3f> rot;
 	ofParameter<ofVec3f> pos;

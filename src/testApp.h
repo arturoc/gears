@@ -9,9 +9,10 @@
 #include "ofParameter.h"
 #include "Glow.h"
 #include "ofBasicSoundPlayer.h"
-#include "ofxTimeline.h"
 #include "ofBaseClock.h"
 #include "ofTimeUtils.h"
+#include "Bolt.h"
+#include "AnimationSoundStream.h"
 
 class testApp : public ofBaseApp{
 
@@ -30,39 +31,60 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		
-		void connectionAngleChanged(float & angle);
+		Gear * getGear(string name);
+
 		void pausePressed(bool & pressed);
 		void resetTimePressed(bool & pressed);
+
+		void facesWireframeAlphaChanged(float & wireframeAlpha);
+		void lineWidthChanged(float & lineWeight);
+		void soundPositionChanged(float & soundPosition);
 
 
 		ofxPanel panel;
 		ofParameter<float> lightx, lighty, lightz;
 		ofParameter<int> fps;
-		ofParameter<float> connectionAngle;
 		ofParameter<float> cameraLatitude, cameraLongitude, orbitRadius;
 		ofParameter<float> cameraTopY;
 		ofParameter<float> cameraFov;
 		ofParameter<bool> pause;
+		ofParameter<bool> autoAnimation;
+		ofParameter<int> frame;
+		ofParameter<float> globalFacesWireframeAlpha;
+		ofParameter<float> globalLineWidth;
+		ofParameter<int> blendMode;
+		ofParameter<bool> drawAdditionalViews;
+		ofParameter<bool> lightsOn;
+		ofParameter<float> soundPosition;
+
+		enum BlendMode{
+			WireADDFacesALPHA,
+			WireALPHAFacesADD,
+			AllADD,
+			AllAlpha
+		};
+
 		ofxButton resetTime;
 
 		ofLight light;
 
 		Glow glow;
 		ofBasicSoundPlayer player;
-		ofxTimeline timeline;
-
-		/*Gear gear1, gear2, gear3, gear4;
-		Gear gearCinta;
-		Gear gearDir;*/
 
 		vector<Gear*> gears;
+		vector<Model*> models;
 
 		MusicCilinder musicCilinder;
+		Bolt bolt;
 		ofCamera cameraTop,cameraFront,cameraLeft,cameraRight;
 		ofxFBXCamera * camera;
-		ofFrameClock clock;
-		ofSoundStreamClock audioClock;
+		ofFrameClock clock, cameraClock;
+		ofSoundPlayerClock audioClock;
 		WaveStripe wave;
 
 		ofxFBXScene fbxScene;
+		ofFbo renderFbo;
+		ofPixels pixels;
+		bool updatingSoundPos;
+		ofPtr<AnimationSoundStream> animationSoundStream;
 };

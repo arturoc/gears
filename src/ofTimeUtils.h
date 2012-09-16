@@ -10,6 +10,7 @@
 
 #include "ofSoundStream.h"
 #include "ofBaseClock.h"
+#include "ofSoundPlayer.h"
 
 class ofSystemClock: public ofBaseClock{
 public:
@@ -17,15 +18,15 @@ public:
 
 	void start();
 
-	unsigned long getElapsedTimeMicros();
-	unsigned long getLastFrameMicros();
-	unsigned long getSystemTimeMicros();
+	long unsigned long getElapsedTimeMicros();
+	long unsigned long getLastFrameMicros();
+	long unsigned long getSystemTimeMicros();
 
 	void reset();
 	void update();
 
 private:
-	unsigned long startTime, lastFrameTime, prevFrameTime;
+	long unsigned long startTime, lastFrameTime, prevFrameTime;
 };
 
 class ofFrameClock: public ofBaseClock{
@@ -37,15 +38,17 @@ public:
 	void setFrameRate(double fps);
 	double getFrameRate();
 
-	unsigned long getElapsedTimeMicros();
-	unsigned long getLastFrameMicros();
-	unsigned long getSystemTimeMicros();
+	long unsigned long getElapsedTimeMicros();
+	long unsigned long getLastFrameMicros();
+	long unsigned long getSystemTimeMicros();
 
 	void reset();
 	void update();
+	void setFrame(u_long frame); // manually update the clock for testing;
+	u_long getFrame();
 
 private:
-	unsigned long startTime, lastFrameTime, prevFrameTime, systemTimeMicros;
+	long unsigned long startTime, lastFrameTime, prevFrameTime, systemTimeMicros, frame;
 	double fps;
 
 };
@@ -55,17 +58,37 @@ public:
 	ofSoundStreamClock();
 
 	void start();
-	void setSoundStream(ofSoundStream & soundStream);
+	void setSoundStream(ofPtr<ofBaseSoundStream> soundStream);
 
-	unsigned long getElapsedTimeMicros();
-	unsigned long getLastFrameMicros();
-	unsigned long getSystemTimeMicros();
+	long unsigned long getElapsedTimeMicros();
+	long unsigned long getLastFrameMicros();
+	long unsigned long getSystemTimeMicros();
 
 	void reset();
 	void update();
 
 private:
-	unsigned long startTime, lastFrameTime, prevFrameTime;
-	ofSoundStream * soundStream;
+	long unsigned long startTime, lastFrameTime, prevFrameTime;
+	ofPtr<ofBaseSoundStream> soundStream;
+};
+
+class ofSoundPlayerClock: public ofBaseClock{
+public:
+	ofSoundPlayerClock();
+
+	void start();
+	void setSoundPlayer(ofBaseSoundPlayer & soundPlayer, int offsetMicros=0);
+
+	long unsigned long getElapsedTimeMicros();
+	long unsigned long getLastFrameMicros();
+	long unsigned long getSystemTimeMicros();
+
+	void update();
+	void reset();
+
+private:
+	long long startTime, lastFrameTime, prevFrameTime;
+	ofBaseSoundPlayer * soundPlayer;
+	int offsetMicros;
 };
 #endif /* OFTIMEUTILS_H_ */

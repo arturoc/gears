@@ -28,7 +28,8 @@ public:
 	void renderFill();
 
 	static ofBaseClock * clock;
-	static ofSoundStreamClock * audioClock;
+	static ofBaseClock * audioClock;
+	static ofBasicSoundPlayer * soundPlayer;
 
 	ofParameter<float> radius;
 	ofParameter<float> rotZVel;
@@ -46,7 +47,14 @@ private:
 		float pct;
 		float startTime;
 	};
+	struct Amplitude{
+		Amplitude(float amp, float rot, float timeCreated):amp(amp),rot(rot),timeCreated(timeCreated){}
+		float amp;
+		float rot;
+		float timeCreated;
+	};
 	vector<Note> notes;
+	vector<Amplitude> wave;
 };
 
 #endif /* MUSICCILINDER_H_ */

@@ -6,11 +6,13 @@
  */
 
 #include "Gear.h"
+#include "MusicCilinder.h"
 
 ofBaseClock * Gear::clock;
 
 Gear::Gear() {
 	mom = NULL;
+	shaft = NULL;
 	connectionAngle = 0;
 }
 
@@ -34,7 +36,14 @@ void Gear::update(){
 	if(mom){
 		pos = ofVec3f(mom->pos->x + offsetx*sin(connectionAngle),mom->pos->y + offsetx*cos(connectionAngle),mom->pos->z);
 		rotZVel = mom->rotZVel;
+		rotZFactor = -mom->rotZFactor * double(mom->reduction)/double(reduction);
 	}
+	if(shaft){
+		pos = ofVec3f(shaft->pos->x,shaft->pos->y,shaft->pos->z);
+		rotZVel = shaft->rotZVel;
+		rotZFactor = 1;
+	}
+
 	rot = ofVec3f(rot->x,rot->y, rot->z + rotZVel * rotZFactor * clock->getLastFrameSeconds());
 	if(rot->z>360) rot = ofVec3f(rot->x,rot->y,rot->z - 360);
 	if(fbxMesh){
@@ -42,18 +51,24 @@ void Gear::update(){
 	}
 	ofQuaternion zrot;
 	if(rotAxis==0){
-		zrot.makeRotate(rot->z,ofVec3f(1,0,0));
+		zrot.makeRotate(rot->z+offsetRotz,ofVec3f(1,0,0));
 	}else if(rotAxis==1){
-		zrot.makeRotate(rot->z,ofVec3f(0,1,0));
+		zrot.makeRotate(rot->z+offsetRotz,ofVec3f(0,1,0));
 	}else{
-		zrot.makeRotate(rot->z,ofVec3f(0,0,1));
+		zrot.makeRotate(rot->z+offsetRotz,ofVec3f(0,0,1));
 	}
-	ofQuaternion q = fbxMesh->getNode().getGlobalOrientation();
+	ofQuaternion q = fbxMesh->getNode().getOrientationQuat();
 	zrot *= q;
-	fbxMesh->getNode().setGlobalOrientation(zrot);
+	fbxMesh->getNode().setOrientation(zrot);
 }
 
 void Gear::connectTo(Gear & gear, float angle){
 	mom = &gear;
+	if(shaft) shaft=NULL;
 	connectionAngle = ofDegToRad(angle);
+}
+
+void Gear::connectTo(MusicCilinder & cilinder){
+	shaft = &cilinder;
+	if(mom) mom=NULL;
 }

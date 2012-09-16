@@ -1,136 +1,205 @@
 #include "testApp.h"
 
+Gear * testApp::getGear(string name){
+	for(int i=0;i<gears.size();i++){
+		if(gears[i]->getName()==name){
+			return gears[i];
+		}
+	}
+	return NULL;
+}
+
 //--------------------------------------------------------------
 void testApp::setup(){
 	clock.setFrameRate(30);
+	cameraClock.setFrameRate(30);
 	Gear::clock = &clock;
 	MusicCilinder::clock = &clock;
 	MusicCilinder::audioClock = &audioClock;
+	MusicCilinder::soundPlayer = &player;
 	WaveStripe::clock = &clock;
+	Bolt::clock = &clock;
 
-	fbxScene.load("A_camara_02.fbx");
+	fbxScene.load("A_camara_03_sintesis.fbx");
 
-	/*gear1.setup("engranajeGrande.obj","gear1");
-	gear2.setup("engranajeChico.obj","gear2");
-	gear3.setup("engranajeChico.obj","gear3");
-	gear4.setup("engranajeGrande.obj","gear4");
-	gearCinta.setup("gearCintas.obj","gearCinta");
-	gearDir.setup("gearDir.obj","gearDir");*/
-
-
-	//musicCilinder.setup("musicalBox_.obj","musicCilinder");
 	wave.setup();
+	globalFacesWireframeAlpha.addListener(this,&testApp::facesWireframeAlphaChanged);
+	globalLineWidth.addListener(this,&testApp::lineWidthChanged);
 
 	panel.setup("gui");
 	panel.add(lightx.set("x_light",ofGetWidth()*.5,-ofGetWidth(),ofGetWidth()));
 	panel.add(lighty.set("y_light",ofGetHeight()*.5,-ofGetHeight(),ofGetHeight()));
 	panel.add(lightz.set("z_light",ofGetWidth()*.5,-ofGetWidth(),ofGetWidth()));
-	panel.add(connectionAngle.set("connectionAngle",0,0,360));
 	panel.add(fps.set("fps",60,0,300));
 	panel.add(cameraLatitude.set("cameraLatitude",0,-180,180));
 	panel.add(cameraLongitude.set("cameraLongitude",0,-180,180));
-	panel.add(orbitRadius.set("orbitRadius",1000,-3000,3000));
+	panel.add(orbitRadius.set("orbitRadius",1000,0,400));
+	panel.add(globalFacesWireframeAlpha.set("globalFacesWireframeAlpha",1,0,1));
+	panel.add(globalLineWidth.set("globalLineWidth",3,0,10));;
+	panel.add(blendMode.set("blendMode",0,0,3));
 	panel.add(cameraTopY.set("cameraTopY",3000,0,6000));
-	//panel.add(cameraFov.set("cameraFov",camera.getFov(),8,150));
 	panel.add(glow.passes);
 	panel.add(pause.set("pause",false));
+	panel.add(autoAnimation.set("autoAnimation",true));
+	panel.add(frame.set("frame",0,0,300));
 	panel.add(resetTime.setup("resetTime"));
-	/*panel.add(gearCinta.parameters);
-	panel.add(gearDir.parameters);
-	panel.add(gear1.parameters);
-	panel.add(gear2.parameters);
-	panel.add(gear3.parameters);
-	panel.add(gear4.parameters);*/
+	panel.add(soundPosition.set("soundPosition",0,0,225));
+	panel.add(drawAdditionalViews.set("drawAdditionalViews",false));
+	panel.add(lightsOn.set("lightsOn",false));
+
+
 	panel.add(wave.parameters);
 	for(u_int i=0;i<fbxScene.getMeshes().size();++i){
-		if(ofIsStringInString(ofToLower(fbxScene.getMeshes()[i].getName()),"engranaje")){
+		vector<string> parsed = ofSplitString(ofToLower(fbxScene.getMeshes()[i]->getName()),"_");
+		string name = parsed[0];
+		string connection;
+		int reduction=1;
+		if(parsed.size()>1 && parsed[1].substr(0,2)=="to"){
+			connection = parsed[1].substr(2);
+		}else if(parsed.size()>2 && parsed[2].substr(0,2)=="to"){
+			connection = parsed[2].substr(2);
+			reduction = ofToInt(parsed[1]);
+		}else if(parsed.size()>1){
+			reduction = ofToInt(parsed[1]);
+		}
+		cout << name << " to " << connection << " reduction " << reduction;
+		if(ofIsStringInString(name,"gear") ||
+		   ofIsStringInString(name,"screw") ){
 			Gear * gear = new Gear;
-			gear->setup(fbxScene.getMeshes()[i]);
-			if(i>0){
-				gear->connectTo(*gears[i-1],0);
-				gear->rotZFactor = -1;
+			gear->setup(*fbxScene.getMeshes()[i]);
+			gear->reduction = reduction;
+			gear->rotZFactor = 1;
+			cout << " at " << gear->rotZFactor << endl;
+			if(ofIsStringInString(name,"geardv")
+				|| ofIsStringInString(name,"geardh")
+				|| ofIsStringInString(name,"screw")){
+				gear->rotAxis = 1;
+			}else{
+				gear->rotAxis = 2;
 			}
-			gear->rotAxis=2;
 			gears.push_back(gear);
 			panel.add(gear->parameters);
-		}else if(ofIsStringInString(ofToLower(fbxScene.getMeshes()[i].getName()),"tubo")){
-			Gear * gear = new Gear;
-			gear->setup(fbxScene.getMeshes()[i]);
-			if(i>0){
-				gear->connectTo(*gears[i-1],0);
-				gear->rotZFactor = i%2==0?1:-1;
-			}
-			gear->rotAxis=1;
-			gears.push_back(gear);
-			panel.add(gear->parameters);
-
-		}else if(ofIsStringInString(ofToLower(fbxScene.getMeshes()[i].getName()),"cilindro")){
-			musicCilinder.setup(fbxScene.getMeshes()[i]);
-			if(i>0){
-				musicCilinder.connectTo(*gears[0]);
-			}
+		}else if(ofIsStringInString(name,"cilinder")){
+			musicCilinder.setup(*fbxScene.getMeshes()[i]);
+			cout << " at " << 1 << endl;
 			panel.add(musicCilinder.parameters);
+		}else if(ofIsStringInString(name,"tuerca")){
+			bolt.setup(*fbxScene.getMeshes()[i]);
+			bolt.rotAxis = 1;
+			panel.add(bolt.parameters);
 
+		}else if( ofIsStringInString(name,"tubo") ){
+			Model * model = new Model;
+			model->setup(*fbxScene.getMeshes()[i]);
+			models.push_back(model);
+			panel.add(model->parameters);
 		}
 
 	}
-	//panel.loadFromFile("settings.xml");
 
-	connectionAngle.addListener(this,&testApp::connectionAngleChanged);
+	for(u_int i=0;i<fbxScene.getMeshes().size();i++){
+		vector<string> parsed = ofSplitString(ofToLower(fbxScene.getMeshes()[i]->getName()),"_");
+		string name = parsed[0];
+		string connection;
+		int reduction=1;
+		if(parsed.size()>1 && parsed[1].substr(0,2)=="to"){
+			connection = parsed[1].substr(2);
+		}else if(parsed.size()>2 && parsed[2].substr(0,2)=="to"){
+			connection = parsed[2].substr(2);
+		}else if(parsed.size()>1 && ofIsStringInString(name,"gear")){
+			reduction = ofToInt(parsed[1]);
+		}
+		Gear * from = getGear(name);
+		Gear * to = getGear(connection);
+		if(from && !to){
+			if(connection=="cilinder"){
+				from->connectTo(musicCilinder);
+			}
+		}
+		if(!from && name=="tuerca"){
+			bolt.connectTo(*to);
+		}
+
+		if(from && to){
+			from->connectTo(*to,0);
+		}
+	}
+	musicCilinder.connectTo(*getGear("gear1"));
+	getGear("screw")->reduction = -1;
+
+	panel.loadFromFile("settings.xml");
+
 	pause.addListener(this,&testApp::pausePressed);
 	resetTime.addListener(this,&testApp::resetTimePressed);
-
-	/*gear1.rotZFactor = 1;
-	gear1.offsetx = 0;
-
-	gear2.rotZFactor = -15./13.;
-	gear2.connectTo(gear1,connectionAngle);
-
-	gear3.rotZFactor = -15./13.;
-	gear3.offsetx = (float)gear2.offsetx;
-	gear3.offsetRotz = (float)gear2.offsetRotz;
-	gear3.connectTo(gear1,0);
-
-	gear4.rotZFactor = 1;
-	gear4.offsetx = (float)gear2.offsetx;
-	gear4.connectTo(gear3,-30);*/
+	soundPosition.addListener(this,&testApp::soundPositionChanged);
 
 	//camera.setFarClip(-15000);
-	camera = &fbxScene.getCameras()[0];
+	camera = fbxScene.getCameras()[0];
+	camera->setNearClip(40);
+	camera->setFarClip(15000);
 
 	cameraTop.setFarClip(-15000);
 	cameraTop.setPosition(0,cameraTopY,-1500);
 	cameraTop.lookAt(ofVec3f(0,0,0));
 
-	musicCilinder.connectTo(*gears[0]);
 
 	ofBackground(0);
 	light.setup();
-	light.enable();
-	ofSetVerticalSync(true);
+	//light.enable();
+	//ofSetVerticalSync(true);
 	ofEnableAlphaBlending();
 	glow.setup(1280,720);
 
-	timeline.setup();
-	timeline.setDurationInSeconds(10);
-	timeline.setLoopType(OF_LOOP_NORMAL);
-	timeline.addKeyframes("Rotate Z vel", "rotatez.xml", ofRange(-360, 360));
-	timeline.addKeyframes("z", "z.xml", ofRange(0, -10000));
+	ofFbo::Settings settings;
+	settings.depthStencilAsTexture = false;
+	settings.useDepth = true;
+	settings.width = 1280;
+	settings.height = 720;
+	settings.internalformat = GL_RGBA;
+	settings.depthStencilInternalFormat = GL_DEPTH_COMPONENT32;
+	settings.useStencil = false;
+	settings.numSamples = 8;
+	renderFbo.allocate(settings);
 
-
-	//timeline.setOffset(ofVec2f(0,740));
-
-	player.loadSound("07.Microseq.mp3",true);
+	animationSoundStream = ofPtr<AnimationSoundStream>(new AnimationSoundStream);
+	player.loadSound("07.Microseq.mp3");
+	animationSoundStream->setup(2,0,44100,256,1);
+	animationSoundStream->setClock(clock);
+	//player.setSoundStream(animationSoundStream);
+	audioClock.setSoundPlayer(player,-200000);
 	ofAddListener(player.newBufferE,&wave,&WaveStripe::newSoundBuffer);
-	audioClock.setSoundStream(ofBasicSoundPlayer::getSoundStream());
 	clock.start();
 	audioClock.start();
 	player.play();
-	//ofSetFrameRate(60);
+
 }
 
-void testApp::connectionAngleChanged(float & angle){
-	//gear2.connectTo(gear1,connectionAngle);
+void testApp::soundPositionChanged(float & soundPosition){
+	if(updatingSoundPos) return;
+	player.setPositionMS(soundPosition*1000);
+}
+
+void testApp::facesWireframeAlphaChanged(float & wireframeAlpha){
+	for(u_int i=0;i<gears.size();i++){
+		gears[i]->wireFacesAlpha = wireframeAlpha;
+	}
+	for(u_int i=0;i<models.size();i++){
+		models[i]->wireFacesAlpha = wireframeAlpha;
+	}
+	musicCilinder.wireFacesAlpha = wireframeAlpha;
+	wave.wireFacesAlpha = wireframeAlpha;
+	bolt.wireFacesAlpha = wireframeAlpha;
+}
+
+void testApp::lineWidthChanged(float & lineWeight){
+	for(u_int i=0;i<gears.size();i++){
+		gears[i]->lineWeight = lineWeight;
+	}
+	for(u_int i=0;i<models.size();i++){
+		models[i]->lineWeight = lineWeight;
+	}
+	musicCilinder.lineWeight = lineWeight;
+	wave.lineWeight = lineWeight;
 }
 
 void testApp::pausePressed(bool & pressed){
@@ -144,7 +213,20 @@ void testApp::resetTimePressed(bool & pressed){
 
 //--------------------------------------------------------------
 void testApp::update(){
+	if(autoAnimation){
+		cameraClock.update();
+		frame = cameraClock.getFrame();
+	}else{
+		cameraClock.setFrame(frame);
+	}
+
 	clock.update();
+	audioClock.update();
+	animationSoundStream->update();
+
+	updatingSoundPos = true;
+	soundPosition = double(player.getPositionMS())/1000.;
+	updatingSoundPos = false;
 
 	light.setPosition(lightx,lighty,lightz);
 	const ofSoundBuffer & buffer = player.getCurrentBuffer();
@@ -152,36 +234,31 @@ void testApp::update(){
 	for(int i=0;i<(int)buffer.bufferSize();i++){
 		avg += abs(buffer[i*buffer.getNumChannels()]);
 	}
-	avg/=buffer.bufferSize();
+	//cout << "avg " << avg << "/" << buffer.bufferSize() << endl;
+	if(buffer.bufferSize()){
+		avg/=buffer.bufferSize();
 
-	gears[0]->rotZVel = avg*2000;
-	for(u_int i=0;i<gears.size();i++){
-		gears[i]->update();
+		getGear("gear2")->rotZVel = avg*1800;
+		for(u_int i=0;i<gears.size();i++){
+			gears[i]->update();
+		}
+		musicCilinder.update();
+		bolt.update();
+		wave.update();
 	}
 
-	camera->setTime(clock.getElapsedTimeMillis());
+	camera->setTime(cameraClock.getElapsedTimeMillis());
 
-	/*gear1.rotZVel = avg*2000;
-	gear1.update();
-	gear2.update();
-	gear3.update();
-	gear4.update();
-	gearCinta.update();
-	gearDir.update();*/
-	musicCilinder.update();
 
-	wave.update();
 
-	//rotVelZ = timeline.getKeyframeValue("Rotate Z vel");
-	//z = timeline.getKeyframeValue("z");
 	fps = ofGetFrameRate();
 
-	//camera.setFov(cameraFov);
-	//camera.lookAt(gears[0]->pos,ofVec3f(0,1,0));
-	//cameraLongitude = gear1.rot->z*5;
-	//cameraLatitude = gear1.rot->z*5;
-	//while (cameraLatitude>90) cameraLatitude-=180;
-	//camera.orbit(cameraLongitude,cameraLatitude,orbitRadius,gear1.pos);
+	if(!autoAnimation){
+		//camera->setFov(cameraFov);
+		camera->lookAt(musicCilinder.getNode().getGlobalPosition(),ofVec3f(0,1,0));
+		while (cameraLatitude>90) cameraLatitude-=180;
+		camera->orbit(cameraLongitude,cameraLatitude,orbitRadius,musicCilinder.getNode().getGlobalPosition());
+	}
 
 	cameraTop.resetTransform();
 	cameraTop.setPosition(0,cameraTopY,0);//gear1.pos.get().z);
@@ -202,6 +279,10 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+	if(lightsOn){
+		light.enable();
+	}
+	glEnable(GL_DEPTH_TEST);
 	ofFill();
 	ofSetColor(255);
 	ofPushView();
@@ -210,144 +291,140 @@ void testApp::draw(){
 	ofPopView();
 
 	glow.begin(false);
+	if(blendMode==WireALPHAFacesADD || blendMode==AllADD) ofEnableBlendMode(OF_BLENDMODE_ADD);
+	else ofEnableAlphaBlending();
+
 	camera->begin();
 	//ofBackgroundGradient(ofColor(50),ofColor::black,OF_GRADIENT_CIRCULAR);
 
 	for(u_int i=0;i<gears.size();i++){
 		gears[i]->drawFill();
 	}
-	/*gear1.drawFill();
-	gear2.drawFill();
-	gear3.drawFill();
-	gear4.drawFill();
-	gearCinta.drawFill();
-	gearDir.drawFill();*/
+	for(u_int i=0;i<models.size();i++){
+		models[i]->drawFill();
+	}
 	musicCilinder.drawFill();
+	bolt.drawFill();
 	wave.drawFill();
 	camera->end();
 	glow.end();
 
 	ofSetColor(255);
-	ofEnableBlendMode(OF_BLENDMODE_ADD);
 	glow.draw(290,720+10,1280,-720);
 
 	camera->begin(ofRectangle(290,10,1280,720));
-
+	if(blendMode==WireADDFacesALPHA) ofEnableBlendMode(OF_BLENDMODE_ADD);
+	else ofEnableAlphaBlending();
 	for(u_int i=0;i<gears.size();i++){
 		gears[i]->drawContour();
 	}
+	for(u_int i=0;i<models.size();i++){
+		models[i]->drawContour();
+	}
 
-	/*gear1.drawContour();
-	gear2.drawContour();
-	gear3.drawContour();
-	gear4.drawContour();
-	gearCinta.drawContour();
-	gearDir.drawContour();*/
 	musicCilinder.drawContour();
+	bolt.drawContour();
 	wave.drawContour();
 	camera->end();
+	glDisable(GL_DEPTH_TEST);
 
+	light.disable();
+	ofDisableLighting();
 
-	ofEnableAlphaBlending();
+	/*ofPushView();
+	ofViewport(290,10,1280,720);
+	ofSaveFrame(true);
+	ofPopView();*/
 
-	ofSetColor(0);
-	ofFill();
-	ofRect(290,10,1280/4,720/4);
-	cameraTop.begin(ofRectangle(290,10,1280/4,720/4));
+	if(drawAdditionalViews){
+		ofSetColor(0);
+		ofFill();
+		ofRect(290,10,1280/4,720/4);
+		cameraTop.begin(ofRectangle(290,10,1280/4,720/4));
 
-	for(u_int i=0;i<gears.size();i++){
-		gears[i]->drawContour();
+		for(u_int i=0;i<gears.size();i++){
+			gears[i]->drawContour();
+		}
+		for(u_int i=0;i<models.size();i++){
+			models[i]->drawContour();
+		}
+
+		musicCilinder.drawContour();
+		bolt.drawContour();
+		wave.drawContour();
+		camera->draw();
+		cameraTop.end();
+
+		ofSetColor(0);
+		ofFill();
+		ofRect(290,10+720/4,1280/4,720/4);
+		cameraFront.begin(ofRectangle(290,(720/4)+10,1280/4,720/4));
+
+		for(u_int i=0;i<gears.size();i++){
+			gears[i]->drawContour();
+		}
+		for(u_int i=0;i<models.size();i++){
+			models[i]->drawContour();
+		}
+
+		musicCilinder.drawContour();
+		bolt.drawContour();
+		wave.drawContour();
+		camera->draw();
+		cameraFront.end();
+
+		ofSetColor(0);
+		ofFill();
+		ofRect(290,10+(720/4)*2,1280/4,720/4);
+		cameraLeft.begin(ofRectangle(290,(720/4)*2+10,1280/4,720/4));
+
+		for(u_int i=0;i<gears.size();i++){
+			gears[i]->drawContour();
+		}
+		for(u_int i=0;i<models.size();i++){
+			models[i]->drawContour();
+		}
+
+		musicCilinder.drawContour();
+		bolt.drawContour();
+		wave.drawContour();
+		camera->draw();
+		cameraLeft.end();
+
+		ofSetColor(0);
+		ofFill();
+		ofRect(290,10+(720/4)*3,1280/4,720/4);
+		cameraRight.begin(ofRectangle(290,(720/4)*3+10,1280/4,720/4));
+
+		for(u_int i=0;i<gears.size();i++){
+			gears[i]->drawContour();
+		}
+		for(u_int i=0;i<models.size();i++){
+			models[i]->drawContour();
+		}
+
+		musicCilinder.drawContour();
+		bolt.drawContour();
+		wave.drawContour();
+		camera->draw();
+		cameraRight.end();
+
+		ofNoFill();
+		ofSetLineWidth(1);
+		ofSetColor(255);
+		ofRect(290,10,1280,720);
+		ofRect(290,10,1280/4,720/4);
+		ofRect(290,10+720/4,1280/4,720/4);
+		ofRect(290,10+(720/4)*2,1280/4,720/4);
+		ofRect(290,10+(720/4)*3,1280/4,720/4);
 	}
 
-	/*gear1.drawContour();
-	gear2.drawContour();
-	gear3.drawContour();
-	gear4.drawContour();
-	gearCinta.drawContour();
-	gearDir.drawContour();*/
-	musicCilinder.drawContour();
-	wave.drawContour();
-	camera->draw();
-	cameraTop.end();
 
-	ofSetColor(0);
-	ofFill();
-	ofRect(290,10+720/4,1280/4,720/4);
-	cameraFront.begin(ofRectangle(290,(720/4)+10,1280/4,720/4));
-
-	for(u_int i=0;i<gears.size();i++){
-		gears[i]->drawContour();
-	}
-
-	/*gear1.drawContour();
-	gear2.drawContour();
-	gear3.drawContour();
-	gear4.drawContour();
-	gearCinta.drawContour();
-	gearDir.drawContour();*/
-	musicCilinder.drawContour();
-	wave.drawContour();
-	camera->draw();
-	cameraFront.end();
-
-	ofSetColor(0);
-	ofFill();
-	ofRect(290,10+(720/4)*2,1280/4,720/4);
-	cameraLeft.begin(ofRectangle(290,(720/4)*2+10,1280/4,720/4));
-
-	for(u_int i=0;i<gears.size();i++){
-		gears[i]->drawContour();
-	}
-
-	/*gear1.drawContour();
-	gear2.drawContour();
-	gear3.drawContour();
-	gear4.drawContour();
-	gearCinta.drawContour();
-	gearDir.drawContour();*/
-	musicCilinder.drawContour();
-	wave.drawContour();
-	camera->draw();
-	cameraLeft.end();
-
-	ofSetColor(0);
-	ofFill();
-	ofRect(290,10+(720/4)*3,1280/4,720/4);
-	cameraRight.begin(ofRectangle(290,(720/4)*3+10,1280/4,720/4));
-
-	for(u_int i=0;i<gears.size();i++){
-		gears[i]->drawContour();
-	}
-
-	/*gear1.drawContour();
-	gear2.drawContour();
-	gear3.drawContour();
-	gear4.drawContour();
-	gearCinta.drawContour();
-	gearDir.drawContour();*/
-	musicCilinder.drawContour();
-	wave.drawContour();
-	camera->draw();
-	cameraRight.end();
-
-
-	ofNoFill();
-	ofSetLineWidth(1);
-	ofSetColor(255);
-	ofRect(290,10,1280,720);
-	ofRect(290,10,1280/4,720/4);
-	ofRect(290,10+720/4,1280/4,720/4);
-	ofRect(290,10+(720/4)*2,1280/4,720/4);
-	ofRect(290,10+(720/4)*3,1280/4,720/4);
 	panel.draw();
-	//timeline.draw();
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-	if(key==' '){
-		timeline.play();
-	}
 }
 
 //--------------------------------------------------------------

@@ -61,7 +61,7 @@ void Model::drawFill(){
 }
 
 void Model::drawModel(bool lineArt){
-	ofEnableLighting();
+	//ofEnableLighting();
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
 	glEnable(GL_NORMALIZE);
@@ -92,7 +92,7 @@ void Model::drawModel(bool lineArt){
 	}
 	glPopClientAttrib();
 	glPopAttrib();
-	ofDisableLighting();
+	//ofDisableLighting();
 }
 
 
@@ -108,7 +108,7 @@ void Model::drawLineArt(float weight, ofColor fill, ofColor stroke) {
 	}else{
 		//glPolygonMode(GL_BACK,GL_FILL);
 		glDepthFunc(GL_LESS);
-		glCullFace(GL_BACK);
+		glCullFace(GL_FRONT);
 	}
 	ofSetColor(fill);
 	renderFill();
@@ -141,4 +141,14 @@ void Model::renderFill(){
 		fbxMesh->drawFaces();
 	}
 	else mesh.drawFaces();
+}
+
+ofNode Model::getNode(){
+	if(fbxMesh) return fbxMesh->getNode();
+	else return ofNode();
+}
+
+string Model::getName(){
+	if(fbxMesh) return ofSplitString(ofToLower(fbxMesh->getName()),"_")[0];
+	else return "";
 }

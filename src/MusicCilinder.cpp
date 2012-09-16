@@ -8,7 +8,8 @@
 #include "MusicCilinder.h"
 
 ofBaseClock * MusicCilinder::clock=0;
-ofSoundStreamClock * MusicCilinder::audioClock=0;
+ofBaseClock * MusicCilinder::audioClock=0;
+ofBasicSoundPlayer * MusicCilinder::soundPlayer=0;
 
 MusicCilinder::MusicCilinder() {
 	mom = NULL;
@@ -49,7 +50,8 @@ void MusicCilinder::connectTo(Gear & gear){
 void MusicCilinder::update(){
 	if(mom){
 		pos = ofVec3f(mom->pos->x ,mom->pos->y ,pos->z);
-		rotZVel = mom->rotZVel * mom->rotZFactor;
+		rotZVel = -mom->rotZVel * mom->rotZFactor;
+		//cout << getName() << " " << rotZVel << endl;
 	}
 	rot = ofVec3f(rot->x,rot->y, rot->z + rotZVel * clock->getLastFrameSeconds());
 	if(rot->z>360) rot = ofVec3f(rot->x,rot->y,rot->z - 360);
@@ -58,34 +60,58 @@ void MusicCilinder::update(){
 	}
 	ofQuaternion zrot;
 	zrot.makeRotate(rot->z,ofVec3f(1,0,0));
-	ofQuaternion q = fbxMesh->getNode().getGlobalOrientation();
+	ofQuaternion q = fbxMesh->getNode().getOrientationQuat();
 	zrot *= q;
-	fbxMesh->getNode().setGlobalOrientation(zrot);
+	fbxMesh->getNode().setOrientation(zrot);
 
 
 	score.update();
 	float now = clock->getElapsedTimeSeconds();
 	MusicCilinderScore::AudioEvent event = score.getNextEvent();
+	float rot = -zrot.getEuler().z+90;
 	if(event.timeMillis>lastEvent){
-		notes.push_back(Note(ofMap(event.freq,0,127,-length*.5,length*.5),rot->z,now));
+		float pos = ofMap(event.freq,50,127,-length*.5,length*.5);
+		//if(notes.empty() || abs(notes.back().rot-(-zrot.getEuler().z+90))>10 || abs(notes.back().pos-pos)>10){
+			notes.push_back(Note(pos,rot,now));
+		//}
 		lastEvent = event.timeMillis;
 	}
 
 	for(u_int i=0;i<notes.size();i++){
 		float time_diff = now - notes[i].startTime;
-		notes[i].pct = ofClamp(time_diff,0,1);
+		notes[i].pct = ofClamp(time_diff,0,3);
 	}
+
+	if(audioClock->getElapsedTimeSeconds()<24) wave.push_back(Amplitude(soundPlayer->getCurrentBuffer().getRMSAmplitude()*30,rot,now));
 }
 
 void MusicCilinder::renderContour(){
+	float now = clock->getElapsedTimeSeconds();
 	Model::renderContour();
 	ofNoFill();
 	for(u_int i=0;i<notes.size();i++){
+		if(notes[i].pct<=1) ofSetColor(200,150+105*notes[i].pct*notes[i].pct);
+		else ofSetColor(200,255*(3-(notes[i].pct))*(3-(notes[i].pct)));
 		ofPushMatrix();
 		ofRotateX(notes[i].rot);
-		ofBox(ofPoint(notes[i].pos,radius-(1-notes[i].pct)*boxSize),boxSize);
+		ofBox(ofPoint(notes[i].pos,radius-(1-ofClamp(notes[i].pct,0,1))*boxSize),boxSize);
 		ofPopMatrix();
 	}
+	/*ofPoint prev;
+	for(u_int i=0;i<wave.size();i++){
+		float life = now-wave[i].timeCreated;
+		if(life>3) continue;
+		ofPushMatrix();
+		ofSetColor(200,255.*(1-life/3.));
+		ofPoint p(length*.5-wave[i].amp*length*.1,radius,0);
+		p.rotate(wave[i].rot,ofVec3f(1,0,0));
+		if(i>0){
+			ofLine(prev,p);
+		}
+		prev=p;
+		ofPopMatrix();
+	}*/
+	ofSetColor(color);
 }
 
 void MusicCilinder::renderFill(){
@@ -93,8 +119,10 @@ void MusicCilinder::renderFill(){
 	ofFill();
 	for(u_int i=0;i<notes.size();i++){
 		ofPushMatrix();
+		if(notes[i].pct<=1) ofSetColor(200,255*notes[i].pct*notes[i].pct);
+		else ofSetColor(200,255*(3-(notes[i].pct))*(3-(notes[i].pct)));
 		ofRotateX(notes[i].rot);
-		ofBox(ofPoint(notes[i].pos,radius-(1-notes[i].pct)*boxSize),boxSize);
+		ofBox(ofPoint(notes[i].pos,radius-(1-ofClamp(notes[i].pct,0,1))*boxSize),boxSize);
 		ofPopMatrix();
 	}
 }

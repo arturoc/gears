@@ -15,9 +15,9 @@ public:
 	}
 
 	virtual void start()=0;
-	virtual unsigned long getElapsedTimeMicros()=0;
-	virtual unsigned long getLastFrameMicros()=0;
-	virtual unsigned long getSystemTimeMicros()=0;
+	virtual long unsigned long getElapsedTimeMicros()=0;
+	virtual long unsigned long getLastFrameMicros()=0;
+	virtual long unsigned long getSystemTimeMicros()=0;
 	virtual void reset()=0;
 	virtual void update()=0;
 
@@ -33,7 +33,7 @@ public:
 		return getElapsedTimeMicros() * SecondsPerMicros;
 	}
 
-	virtual unsigned long getElapsedTimeMillis(){
+	virtual long unsigned long getElapsedTimeMillis(){
 		return getElapsedTimeMicros() * MillisPerMicro;
 	}
 
@@ -42,7 +42,7 @@ public:
 		return getLastFrameMicros() * SecondsPerMicros;
 	}
 
-	virtual unsigned long getLastFrameMillis(){
+	virtual long unsigned long getLastFrameMillis(){
 		return getLastFrameMicros() * MillisPerMicro;
 	}
 
@@ -51,7 +51,7 @@ public:
 		return getSystemTimeMicros()*SecondsPerMicros;
 	}
 
-	virtual unsigned long getSystemTimeMillis(){
+	virtual long unsigned long getSystemTimeMillis(){
 		return getSystemTimeMicros()*MillisPerMicro;
 	}
 

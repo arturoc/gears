@@ -1,0 +1,16 @@
+0-24 caja de musica
+	17 - zoom out
+25-35 engranajes baja tuerca
+35-39 glitch
+40-54 consola
+55-   engranajes sube tuerca
+1:03  engranajes cambian de sentido
+1:10 - sirena zoom out
+1:20 - se ve el array de leds
+1:37 - cintas
+
+
+37 - leds + vu 20%
+50:5 - 1er golpe
+52:5 - 2o golpe
+53:5 - 3er golpe

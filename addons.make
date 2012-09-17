@@ -1,8 +1,8 @@
 ofxAssimpModelLoader
 ofxGui
 ofxXmlSettings
-ofxTimeline
+#ofxTimeline
 ofxTween
-ofxRange
+#ofxRange
 ofxTextInputField
 ofxFbxSDK

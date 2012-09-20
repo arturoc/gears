@@ -8,6 +8,7 @@
 #include "Model.h"
 
 ofxAssimpModelLoader Model::modelLoader;
+ofBaseClock * Model::clock;
 
 Model::Model() {
 	fbxMesh = NULL;
@@ -46,8 +47,15 @@ void Model::setup(ofxFBXMesh & _fbxMesh){
 	parameters.add(color.set("color",ofColor(100,100,100),ofColor(ofColor::black,0),ofColor(ofColor::white,255)));
 	parameters.add(lineWeight.set("lineWeight",3,1,10));
 	parameters.add(wireFacesAlpha.set("wireFacesAlpha",1,0,1));
+	parameters.add(drawWireframe.set("drawWireframe",true));
 	parameters.add(lineArt.set("lineArt",true));
 	parameters.add(scale.set("scale",1000,0.1,5000));
+}
+
+void Model::update(){
+	/*if(fbxMesh){
+		fbxMesh->setTime(clock->getElapsedTimeMillis());
+	}*/
 }
 
 void Model::drawContour(){
@@ -130,6 +138,7 @@ void Model::drawLineArt(float weight, ofColor fill, ofColor stroke) {
 
 
 void Model::renderContour(){
+	if(!drawWireframe) return;
 	if(fbxMesh!=NULL){
 		fbxMesh->drawWireframe();
 	}

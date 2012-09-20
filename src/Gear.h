@@ -13,7 +13,7 @@
 #include "ofParameter.h"
 #include "ofBaseClock.h"
 
-class MusicCilinder;
+class Shaft;
 
 class Gear:public Model {
 public:
@@ -24,9 +24,9 @@ public:
 	void update();
 
 	void connectTo(Gear & gear, float angle);
-	void connectTo(MusicCilinder & cilinder);
+	void connectTo(Shaft & shaft);
 
-	static ofBaseClock * clock;
+	static ofBasicSoundPlayer * soundPlayer;
 
 	ofParameter<float> rotZVel;
 	ofParameter<float> offsetRotz;
@@ -37,8 +37,11 @@ public:
 
 private:
 	Gear * mom;
-	MusicCilinder * shaft;
+	Shaft * shaft;
 	float connectionAngle;
+
+	vector<ofVec3f> originalVertices;
+	vector<unsigned int> originalIndices;
 };
 
 #endif /* GEAR_H_ */

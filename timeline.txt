@@ -1,9 +1,8 @@
 0-24 caja de musica
-	17 - zoom out
-25-35 engranajes baja tuerca
-35-39 glitch
-40-54 consola
-55-   engranajes sube tuerca
+16 - zoom out
+25 glitch
+30 - 52? consola
+52-1:02 recorrido camara hasta counter
 1:03  engranajes cambian de sentido
 1:10 - sirena zoom out
 1:20 - se ve el array de leds

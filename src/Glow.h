@@ -24,6 +24,8 @@ public:
 	void draw(float x, float y);
 	void draw(float x, float y, float w, float h);
 
+	ofTexture & getDepthTexture();
+
 	ofParameter<int> passes;
 
 private:

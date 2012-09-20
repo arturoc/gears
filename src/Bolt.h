@@ -24,11 +24,12 @@ public:
 
 	void connectTo(Gear & gear);
 
-	static ofBaseClock * clock;
 
 	ofParameter<float> yVel;
 	ofParameter<float> yPos;
 	ofParameter<int> rotAxis;
+
+	ofBaseClock * audioClock;
 
 
 private:

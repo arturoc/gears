@@ -12,7 +12,9 @@
 #include "ofBaseClock.h"
 #include "ofTimeUtils.h"
 #include "Bolt.h"
+#include "Shaft.h"
 #include "AnimationSoundStream.h"
+#include "Counter.h"
 
 class testApp : public ofBaseApp{
 
@@ -32,6 +34,8 @@ class testApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		
 		Gear * getGear(string name);
+		Shaft * getShaft(string name);
+		Model * getModel(string name);
 
 		void pausePressed(bool & pressed);
 		void resetTimePressed(bool & pressed);
@@ -42,13 +46,16 @@ class testApp : public ofBaseApp{
 
 
 		ofxPanel panel;
+		ofParameterGroup parameters;
 		ofParameter<float> lightx, lighty, lightz;
 		ofParameter<int> fps;
 		ofParameter<float> cameraLatitude, cameraLongitude, orbitRadius;
 		ofParameter<float> cameraTopY;
 		ofParameter<float> cameraFov;
+		ofParameter<float> farPlane, nearPlane;
 		ofParameter<bool> pause;
 		ofParameter<bool> autoAnimation;
+		ofParameter<bool> fbxCamera;
 		ofParameter<int> frame;
 		ofParameter<float> globalFacesWireframeAlpha;
 		ofParameter<float> globalLineWidth;
@@ -56,6 +63,8 @@ class testApp : public ofBaseApp{
 		ofParameter<bool> drawAdditionalViews;
 		ofParameter<bool> lightsOn;
 		ofParameter<float> soundPosition;
+		ofParameter<bool> saveOneFrame, record;
+		ofParameter<ofVec3f> cameraUp, cameraOffset;
 
 		enum BlendMode{
 			WireADDFacesALPHA,
@@ -72,10 +81,13 @@ class testApp : public ofBaseApp{
 		ofBasicSoundPlayer player;
 
 		vector<Gear*> gears;
+		vector<Shaft*> shafts;
 		vector<Model*> models;
 
 		MusicCilinder musicCilinder;
 		Bolt bolt;
+		Counter counter;
+
 		ofCamera cameraTop,cameraFront,cameraLeft,cameraRight;
 		ofxFBXCamera * camera;
 		ofFrameClock clock, cameraClock;
@@ -87,4 +99,10 @@ class testApp : public ofBaseApp{
 		ofPixels pixels;
 		bool updatingSoundPos;
 		ofPtr<AnimationSoundStream> animationSoundStream;
+
+		ofShortPixels depthPixels;
+		ofImage screen;
+
+		ofNode counterCameraNode;
+		ofVec3f cameraPositionOffsetOriginal;
 };

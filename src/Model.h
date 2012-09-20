@@ -12,6 +12,7 @@
 #include "ofxAssimpModelLoader.h"
 #include "ofVboMesh.h"
 #include "ofConstants.h"
+#include "ofTimeUtils.h"
 
 class Model {
 public:
@@ -20,7 +21,7 @@ public:
 
 	virtual void setup(string path, string name);
 	virtual void setup(ofxFBXMesh & fbxMesh);
-	virtual void update(){};
+	virtual void update();
 
 	void drawContour();
 	void drawFill();
@@ -38,7 +39,9 @@ public:
 	ofParameter<float> wireFacesAlpha;
 	ofParameter<bool> lineArt;
 	ofParameter<float> scale;
+	ofParameter<bool> drawWireframe;
 	ofParameterGroup parameters;
+	static ofBaseClock * clock;
 
 protected:
 	void drawLineArt(float weight = 3, ofColor fill = ofColor(255), ofColor stroke = ofColor(0));

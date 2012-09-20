@@ -29,7 +29,7 @@ void Glow::setup(float w, float h){
 	settings.internalformat = GL_RGBA;
 	settings.depthStencilInternalFormat = GL_DEPTH_COMPONENT32;
 	settings.useStencil = false;
-	settings.numSamples = 4;
+	//settings.numSamples = 4;
 
 	fbo1.allocate(settings);
 	fbo2.allocate(settings);
@@ -63,6 +63,10 @@ void Glow::end(){
 		shader.end();
 		fbo1.end();
 	}
+}
+
+ofTexture & Glow::getDepthTexture(){
+	return fbo1.getDepthTexture();
 }
 
 void Glow::draw(float x, float y){

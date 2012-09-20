@@ -97,6 +97,7 @@ long unsigned long ofFrameClock::getSystemTimeMicros(){
 
 void ofFrameClock::reset(){
 	startTime = 0;
+	frame = 0;
 	prevFrameTime = startTime;
 	lastFrameTime = startTime;
 	systemTimeMicros = startTime;
@@ -107,7 +108,8 @@ void ofFrameClock::update(){
 	setFrame(frame);
 }
 
-void ofFrameClock::setFrame(u_long frame){
+void ofFrameClock::setFrame(u_long _frame){
+	frame = _frame;
 	systemTimeMicros = double(ofBaseClock::MicrosPerSecond)/fps*frame;
 	lastFrameTime = systemTimeMicros-prevFrameTime;
 	prevFrameTime = systemTimeMicros;

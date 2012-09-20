@@ -8,12 +8,12 @@
 #ifndef MUSICCILINDER_H_
 #define MUSICCILINDER_H_
 
-#include "Model.h"
+#include "Shaft.h"
 #include "Gear.h"
 #include "MusicCilinderScore.h"
 #include "ofTimeUtils.h"
 
-class MusicCilinder: public Model {
+class MusicCilinder: public Shaft {
 public:
 	MusicCilinder();
 	virtual ~MusicCilinder();
@@ -22,17 +22,13 @@ public:
 	void setup(ofxFBXMesh & mesh);
 	void update();
 
-	void connectTo(Gear & gear);
-
 	void renderContour();
 	void renderFill();
 
-	static ofBaseClock * clock;
 	static ofBaseClock * audioClock;
 	static ofBasicSoundPlayer * soundPlayer;
 
 	ofParameter<float> radius;
-	ofParameter<float> rotZVel;
 	ofParameter<float> boxSize;
 	ofParameter<float> length;
 

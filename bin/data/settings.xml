@@ -1,23 +1,39 @@
 <gui>
-    <x_light>800</x_light>
-    <y_light>450</y_light>
-    <z_light>800</z_light>
-    <connectionAngle>0</connectionAngle>
-    <fps>33</fps>
-    <cameraLatitude>-9</cameraLatitude>
-    <cameraLongitude>-68.4</cameraLongitude>
-    <orbitRadius>72</orbitRadius>
-    <cameraTopY>3000</cameraTopY>
-    <passes>5</passes>
-    <pause>0</pause>
-    <autoAnimation>0</autoAnimation>
-    <frame>48</frame>
+    <generalParameters>
+        <x_light>800</x_light>
+        <y_light>450</y_light>
+        <z_light>800</z_light>
+        <connectionAngle>0</connectionAngle>
+        <fps>14</fps>
+        <cameraLatitude>-9</cameraLatitude>
+        <cameraLongitude>-68.4</cameraLongitude>
+        <orbitRadius>24</orbitRadius>
+        <cameraTopY>3000</cameraTopY>
+        <passes>5</passes>
+        <pause>0</pause>
+        <autoAnimation>0</autoAnimation>
+        <frame>500</frame>
+        <nearPlane>1</nearPlane>
+        <farPlane>-2</farPlane>
+        <globalFacesWireframeAlpha>0.245</globalFacesWireframeAlpha>
+        <globalLineWidth>1.35</globalLineWidth>
+        <blendMode>0</blendMode>
+        <fbxCamera>1</fbxCamera>
+        <soundPosition>50.607</soundPosition>
+        <drawAdditionalViews>0</drawAdditionalViews>
+        <saveOneFrame>0</saveOneFrame>
+        <record>0</record>
+        <lightsOn>0</lightsOn>
+        <cameraFov>31.4173</cameraFov>
+        <cameraUp>0, 1, 0</cameraUp>
+        <cameraOffset>-0.9, -1.8, 0.900001</cameraOffset>
+    </generalParameters>
     <wave>
         <pos>0, -17.08, 0</pos>
         <rot>0, 90, 0</rot>
         <color>100, 100, 100, 255</color>
-        <lineWeight>2</lineWeight>
-        <wireFacesAlpha>0.18</wireFacesAlpha>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
         <lineArt>1</lineArt>
         <scale>1</scale>
         <thickness>2</thickness>
@@ -84,7 +100,7 @@
         <length>17</length>
     </Cilindro_1>
     <globalFacesWireframeAlpha>0.18</globalFacesWireframeAlpha>
-    <globalLineWidth>2</globalLineWidth>
+    <globalLineWidth>1.3</globalLineWidth>
     <blendMode>3</blendMode>
     <Tube_toCilinder>
         <rot>0, 0, -533.342</rot>
@@ -99,37 +115,39 @@
         <length>17</length>
     </Tube_toCilinder>
     <Gear2_13>
-        <rot>0, 0, -9241.56</rot>
+        <rot>0, 0, -20494.8</rot>
         <color>100, 100, 100, 255</color>
-        <lineWeight>2</lineWeight>
-        <wireFacesAlpha>0.18</wireFacesAlpha>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
         <lineArt>1</lineArt>
         <scale>1000</scale>
-        <rotZVel>95.4122</rotZVel>
+        <rotZVel>133.188</rotZVel>
         <offset_x>-200</offset_x>
         <offsetRotz>0</offsetRotz>
         <rotZFactor>-1</rotZFactor>
+        <drawWireframe>1</drawWireframe>
     </Gear2_13>
     <Gear1_15_toGear2>
-        <rot>0, 0, 347.126</rot>
+        <rot>0, 0, 20.0087</rot>
         <color>100, 100, 100, 255</color>
-        <lineWeight>2</lineWeight>
-        <wireFacesAlpha>0.18</wireFacesAlpha>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
         <lineArt>1</lineArt>
         <scale>1000</scale>
         <rotZVel>0</rotZVel>
         <offset_x>-200</offset_x>
-        <offsetRotz>8.99998</offsetRotz>
+        <offsetRotz>0</offsetRotz>
         <rotZFactor>0.866667</rotZFactor>
+        <drawWireframe>1</drawWireframe>
     </Gear1_15_toGear2>
     <Cilinder_toGear1>
-        <rot>0, 0, -7547.14</rot>
+        <rot>0, 0, -10999.1</rot>
         <color>100, 100, 100, 255</color>
-        <lineWeight>2</lineWeight>
+        <lineWeight>1.3</lineWeight>
         <wireFacesAlpha>0.18</wireFacesAlpha>
         <lineArt>1</lineArt>
         <scale>1000</scale>
-        <rotZVel>-82.6906</rotZVel>
+        <rotZVel>-21.9009</rotZVel>
         <offset_x>-200</offset_x>
         <offsetRotz>0</offsetRotz>
         <rotZFactor>-1</rotZFactor>
@@ -141,28 +159,30 @@
         <rot>0, 0, 0</rot>
         <color>100, 100, 100, 255</color>
         <lineWeight>2</lineWeight>
-        <wireFacesAlpha>0.18</wireFacesAlpha>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
         <lineArt>1</lineArt>
         <scale>1000</scale>
-        <yVel>-1.14848</yVel>
-        <yPos>61.783</yPos>
+        <yVel>0</yVel>
+        <yPos>0</yPos>
+        <drawWireframe>1</drawWireframe>
     </Tuerca_toScrew>
     <Screw_toGearDH>
-        <rot>0, 0, 329.867</rot>
+        <rot>0, 0, 349.341</rot>
         <color>100, 100, 100, 255</color>
-        <lineWeight>2</lineWeight>
-        <wireFacesAlpha>0.18</wireFacesAlpha>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
         <lineArt>1</lineArt>
         <scale>1000</scale>
         <rotZVel>0</rotZVel>
         <offset_x>-200</offset_x>
         <offsetRotz>0</offsetRotz>
         <rotZFactor>-1</rotZFactor>
+        <drawWireframe>1</drawWireframe>
     </Screw_toGearDH>
     <GearDV_toCilinder>
-        <rot>0, 0, -7544.39</rot>
+        <rot>0, 0, -10998.4</rot>
         <color>100, 100, 100, 255</color>
-        <lineWeight>2</lineWeight>
+        <lineWeight>1.3</lineWeight>
         <wireFacesAlpha>0.18</wireFacesAlpha>
         <lineArt>1</lineArt>
         <scale>1000</scale>
@@ -172,21 +192,22 @@
         <rotZFactor>1</rotZFactor>
     </GearDV_toCilinder>
     <GearDH_toGearDV>
-        <rot>0, 0, 344.367</rot>
+        <rot>0, 0, 8.69975</rot>
         <color>100, 100, 100, 255</color>
-        <lineWeight>2</lineWeight>
-        <wireFacesAlpha>0.18</wireFacesAlpha>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
         <lineArt>1</lineArt>
         <scale>1000</scale>
         <rotZVel>0</rotZVel>
         <offset_x>-200</offset_x>
         <offsetRotz>0</offsetRotz>
         <rotZFactor>-1</rotZFactor>
+        <drawWireframe>1</drawWireframe>
     </GearDH_toGearDV>
     <GearCinta>
         <rot>0, 0, 0</rot>
         <color>100, 100, 100, 255</color>
-        <lineWeight>2</lineWeight>
+        <lineWeight>1.3</lineWeight>
         <wireFacesAlpha>0.18</wireFacesAlpha>
         <lineArt>1</lineArt>
         <scale>1000</scale>
@@ -195,12 +216,236 @@
         <offsetRotz>0</offsetRotz>
         <rotZFactor>-1</rotZFactor>
     </GearCinta>
-    <>0
-    <>0
-    <>0
-    <>0
-    <>0</>
-    <soundPosition>27.863</soundPosition>
+    <soundPosition>17.2</soundPosition>
     <drawAdditionalViews>0</drawAdditionalViews>
     <lightsOn>0</lightsOn>
+    <CylinderV>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </CylinderV>
+    <CylinderH>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </CylinderH>
+    <Shaft1_toGear2>
+        <rot>0, 0, 259.08</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>3</lineWeight>
+        <wireFacesAlpha>1</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+        <rotZVel>133.188</rotZVel>
+    </Shaft1_toGear2>
+    <Tube>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </Tube>
+    <Tube.1>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </Tube.1>
+    <TubeCounter>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </TubeCounter>
+    <Counter>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </Counter>
+    <Cylinder2toGear2.1>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+        <rotZVel>0</rotZVel>
+        <offset_x>-200</offset_x>
+        <offsetRotz>0</offsetRotz>
+        <rotZFactor>1</rotZFactor>
+    </Cylinder2toGear2.1>
+    <GearDV2_toShaft1>
+        <rot>0, 0, 254.641</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+        <rotZVel>0</rotZVel>
+        <offset_x>-200</offset_x>
+        <offsetRotz>0</offsetRotz>
+        <rotZFactor>1</rotZFactor>
+    </GearDV2_toShaft1>
+    <GearDH2_toGearDV2>
+        <rot>0, 0, -3134.64</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+        <rotZVel>0</rotZVel>
+        <offset_x>-200</offset_x>
+        <offsetRotz>0</offsetRotz>
+        <rotZFactor>-1</rotZFactor>
+    </GearDH2_toGearDV2>
+    <Cillinder_toGear1>
+        <rot>0, 0, -2720.54</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+        <rotZVel>-115.43</rotZVel>
+        <radius>5</radius>
+        <boxSize>0.4</boxSize>
+        <length>17</length>
+    </Cillinder_toGear1>
+    <Tube_toCillinder>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </Tube_toCillinder>
+    <GearDV_toCillinder>
+        <rot>0, 0, -2716.69</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+        <rotZVel>0</rotZVel>
+        <offset_x>-200</offset_x>
+        <offsetRotz>0</offsetRotz>
+        <rotZFactor>1</rotZFactor>
+    </GearDV_toCillinder>
+    <screwAlarma>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </screwAlarma>
+    <BaseLuces>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </BaseLuces>
+    <CylinderAlarma>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </CylinderAlarma>
+    <neonAzul>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </neonAzul>
+    <semiesferaAzul>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </semiesferaAzul>
+    <bombillaAzul>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </bombillaAzul>
+    <neonRojo>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </neonRojo>
+    <semiesferaRojo>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </semiesferaRojo>
+    <bombillaRojo>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>1</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </bombillaRojo>
+    <corazaLuz>
+        <rot>0, 0, 0</rot>
+        <color>100, 100, 100, 255</color>
+        <lineWeight>1.35</lineWeight>
+        <wireFacesAlpha>0.245</wireFacesAlpha>
+        <drawWireframe>0</drawWireframe>
+        <lineArt>1</lineArt>
+        <scale>1000</scale>
+    </corazaLuz>
+    <>0</>
 </gui>

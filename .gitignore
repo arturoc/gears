@@ -16,6 +16,9 @@ bin/*
 !bin/data
 !bin/data/**
 bin/data/*.mp3
+bin/data/*.wav
+bin/data/*.png
 *.cbp
 *.workspace
 Makefile
+.AppleDouble

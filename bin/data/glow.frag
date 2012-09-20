@@ -38,4 +38,5 @@ void main()
 		
 		gl_FragColor = vec4(color ,texture2DRect(src_tex_unit0, st).a);
 	}
+	gl_FragDepth = gl_FragCoord.z;
 }
